@@ -1,0 +1,21 @@
+{
+  "manifest_version": 2,
+  "name": "Container Colors",
+  "version": "0.1.0",
+  "description": "Description",
+  "homepage_url": "https://example.com",
+  "icons": {
+    "48": "icon.png",
+    "96": "icon.png"
+  },
+  "permissions": [
+    "contextualIdentities",
+    "cookies",
+    "storage",
+    "tabs",
+    "theme"
+  ],
+  "background": {
+    "scripts": ["js/background.js"]
+  }
+}
