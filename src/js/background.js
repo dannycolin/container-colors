@@ -41,53 +41,16 @@ let theme_light = {
   }
 };
 
-let theme_dark = {
-  colors: {
-    tab_background_text: "#fbfbfe",
-    tab_selected: "rgb(66,65,77)",
-    tab_text: "rgb(251,251,254)",
-    icons: "rgb(251,251,254)",
-    frame: "#1c1b22",
-    popup: "rgb(66,65,77)",
-    popup_text: "rgb(251,251,254)",
-    popup_border: "rgb(82,82,94)",
-    popup_highlight: "rgb(43,42,51)",
-    tab_line: "transparent",
-    toolbar: "rgb(43,42,51)",
-    toolbar_top_separator: "transparent",
-    toolbar_bottom_separator: "hsl(240, 5%, 5%)",
-    toolbar_field: "rgb(28,27,34)",
-    toolbar_field_border: "transparent",
-    toolbar_field_text: "rgb(251,251,254)",
-    toolbar_field_focus: "rgb(66,65,77)",
-    toolbar_text: "rgb(251, 251, 254)",
-    ntp_background: "rgb(43, 42, 51)",
-    ntp_card_background: "rgb(66,65,77)",
-    ntp_text: "rgb(251, 251, 254)",
-    sidebar: "#38383D",
-    sidebar_text: "rgb(249, 249, 250)",
-    sidebar_border: "rgba(255, 255, 255, 0.1)",
-    button: "rgb(43,42,51)",
-    button_hover: "rgb(82,82,94)",
-    button_active: "rgb(91,91,102)",
-    button_primary: "rgb(0, 221, 255)",
-    button_primary_hover: "rgb(128, 235, 255)",
-    button_primary_active: "rgb(170, 242, 255)",
-    button_primary_color: "rgb(43, 42, 51)",
-    error_text_color: "rgb(255, 154, 162)",
-    input_background: "#42414D",
-    input_color: "rgb(251,251,254)",
-    input_border: "#8f8f9d",
-    autocomplete_popup_separator: "rgb(82,82,94)",
-    appmenu_update_icon_color: "#54FFBD",
-    appmenu_info_icon_color: "#80EBFF",
-    tab_icon_overlay_stroke: "rgb(66,65,77)",
-    tab_icon_overlay_fill: "rgb(251,251,254)"
-  }
-};
+let firstTab = true;
+let defaultTheme;
 
 async function handleTabActivated(activeInfo) {
   let containerId = await getContainerId(activeInfo.tabId);
+
+  if (firstTab) {
+    defaultTheme = await browser.theme.getCurrent();
+    firstTab = false;
+  }
 
   setTheme(containerId);
 }
@@ -116,8 +79,12 @@ async function setTheme(containerId) {
     }
   };
 
+  if (defaultTheme.colors !== "null") {
+    defaultTheme = theme_light;
+  }
+
   if (containerId == "firefox-default") {
-    browser.theme.update(theme_dark);
+    browser.theme.update(defaultTheme);
   } else {
     browser.theme.update(containerTheme);
   }
